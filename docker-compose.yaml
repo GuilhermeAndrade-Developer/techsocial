@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend.dockerfile
+    ports:
+      - "9000:8080"
+    volumes:
+      - ./backend:/var/www/html
+    depends_on:
+      - database
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+
+  database:
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: techsocial
+      MYSQL_DATABASE: techsocial
+      MYSQL_USER: root
+      MYSQL_PASSWORD: techsocial
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
